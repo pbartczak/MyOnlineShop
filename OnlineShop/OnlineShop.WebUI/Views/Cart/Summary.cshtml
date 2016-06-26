@@ -1,0 +1,12 @@
+﻿@model OnlineShop.Domain.Entites.Cart
+
+<div class="navbar-right">
+    @Html.ActionLink("Koszyk", "Index", "Cart",
+    new { returnUrl = Request.Url.PathAndQuery },
+    new { @class = "btn btn-default, navbar-btn"})
+</div>
+<div class="navbar-text navbar-right">
+    <b>Twoje zakupy:</b>
+    @Model.Lines.Sum(x => x.Quantity) produkt(y),
+    @Model.ComputeTotalValue().ToString("c", new System.Globalization.CultureInfo("pl-PL"));
+</div>

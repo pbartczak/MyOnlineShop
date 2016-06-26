@@ -1,0 +1,50 @@
+﻿@model OnlineShop.WebUI.Models.CartIndexViewModel
+
+<style>
+    #cartTable td { vertical-align: middle; }
+</style>
+
+@{ 
+    ViewBag.Title = "Koszyk";
+}
+
+<h2>Twój koszyk</h2>
+<table id="cartTable" class="table">
+    <thead>
+        <tr>
+            <th>Ilość</th>
+            <th>Produkt</th>
+            <th class="text-right">Cena</th>
+            <th class="text-right">Suma</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td class="text-center">@line.Quantity</td>
+                <td class="text-left">@line.Products.Name</td>
+                <td class="text-right">@line.Products.Price.ToString("c")</td>
+                <td class="text-right">@((line.Quantity * line.Products.Price).ToString("c", new System.Globalization.CultureInfo("pl-PL")))</td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    {
+                        @Html.Hidden("ProductId", line.Products.ProductId)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        <input class="btn btn-sm btn-warning" type="submit" value="Usuń" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Łącznie:</td>
+            <td class="text-right">@Model.Cart.ComputeTotalValue().ToString("c")</td>
+        </tr>
+    </tfoot>
+</table>
+<div class="text-center">
+    <a class="btn btn-primary" href="@Model.ReturnUrl">Kontynuuj zakupy</a>
+    @Html.ActionLink("Zakończ zakupy", "Checkout", null, new { @class = "btn btn-primary"})
+</div>
